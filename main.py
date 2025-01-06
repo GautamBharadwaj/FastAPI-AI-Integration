@@ -1,10 +1,15 @@
 from fastapi import FastAPI, File, UploadFile, Query
 from fastapi.responses import StreamingResponse
-from models import PredictRequest
 from utils import load_model, process_image, save_image, get_inference_results
+from pydantic import BaseModel
+from typing import Optional
+
+class PredictRequest(BaseModel):
+    output_image_name: Optional[str] = "output_image.png"
 
 model = load_model("yolo11n.pt")
 app = FastAPI()
+
 
 @app.post("/predict")
 async def predict(
